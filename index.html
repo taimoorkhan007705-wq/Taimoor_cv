@@ -78,9 +78,7 @@
         }
         header p.title { font-size: 1.2em; font-weight: 500; color: var(--accent); margin-bottom: 30px; }
         
-        /* ---------------------------------------------------- */
-        /* FEATURE 1: NAME GLITCH EFFECT (NEW) */
-        /* ---------------------------------------------------- */
+        /* FEATURE 1: NAME GLITCH EFFECT */
         header h1:hover {
             animation: glitch 0.5s linear infinite;
         }
@@ -107,9 +105,7 @@
             border-color: var(--accent);
         }
         
-        /* ---------------------------------------------------- */
-        /* FEATURE 2: PROJECT BOX GLARE SWEEP (NEW) */
-        /* ---------------------------------------------------- */
+        /* FEATURE 2: PROJECT BOX GLARE SWEEP */
         .info-box::before {
             content: '';
             position: absolute;
@@ -123,24 +119,20 @@
                 rgba(255, 255, 255, 0.3), /* Glare color */
                 transparent
             );
-            transition: none; /* Override default transitions */
-            transform: skewX(-315deg); /* Diagonal angle */
+            transition: none;
+            transform: skewX(-315deg);
         }
         .info-box:hover::before {
             left: 100%;
             transition: left 0.7s ease-in-out;
         }
 
-        /* Make sure the Contact/Skills/Education boxes don't get the glare inside */
+        /* Stop glare on side boxes */
         .info-box.contact::before, .info-box#skill-section::before, .education-box::before {
-            /* Keep Glare only for general boxes and projects */
-            /* You can remove this block if you want the glare on all boxes */
             content: ''; 
         }
 
-        /* ---------------------------------------------------- */
-        /* FEATURE 3: DYNAMIC CTA BUTTON (NEW) */
-        /* ---------------------------------------------------- */
+        /* FEATURE 3: DYNAMIC CTA BUTTON */
         .cta-button {
             display: inline-block;
             margin-top: 20px;
@@ -177,9 +169,7 @@
             transform: translateY(0);
         }
 
-        /* ---------------------------------------------------- */
-        /* FEATURE 4: STRENGTHS CHIP STYLING (NEW) */
-        /* ---------------------------------------------------- */
+        /* FEATURE 4: STRENGTHS CHIP STYLING */
         .strength-chips {
             display: flex;
             flex-wrap: wrap;
@@ -203,14 +193,101 @@
             box-shadow: 0 0 15px var(--accent-glow);
         }
         
-        /* ---------------------------------------------------- */
-        /* EXISTING ANIMATION STYLES (Retained) */
-        /* ---------------------------------------------------- */
+        /* MODIFICATION: GLOWING SEPARATOR BAR */
         .info-box h3 {
-            color: var(--accent-glow); margin: 0; padding-bottom: 10px; border-bottom: 2px solid var(--accent);
-            font-size: 1.3em; font-weight: 600;
+            color: var(--accent-glow); 
+            margin: 0; 
+            padding-bottom: 10px; 
+            padding-top: 5px; 
+            font-size: 1.3em; 
+            font-weight: 600;
+            position: relative; 
+            display: block;
         }
-        .info-box h3 i { margin-right: 10px; color: var(--text-main); }
+        .info-box h3 i { margin-right: 10px; color: var(--text-main); transition: transform 0.3s, color 0.3s; }
+        
+        /* NEW GLOW BAR STYLING */
+        .info-box h3::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 1px; 
+            background: var(--accent);
+            box-shadow: 0 0 8px var(--accent-glow); 
+            margin-top: 10px;
+            opacity: 0.7; 
+            transition: all 0.3s;
+        }
+        
+        .info-box:hover h3::after {
+            opacity: 1; 
+            box-shadow: 0 0 12px var(--accent-glow);
+            transform: scaleX(1.01);
+        }
+        
+        /* ---------------------------------------------------- */
+        /* NEW SECTION: ICON HOVER ANIMATIONS */
+        /* ---------------------------------------------------- */
+
+        /* Common Animation for Main H2 Headings */
+        .section-heading i {
+            margin-right: 10px;
+            transition: transform 0.3s, text-shadow 0.3s, color 0.3s;
+            display: inline-block;
+        }
+        .section-heading:hover i.fa-user-circle, 
+        .section-heading:hover i.fa-project-diagram {
+            animation: pulsing-icon 1s infinite alternate;
+        }
+
+        /* Animation Keyframes */
+        @keyframes pulsing-icon {
+            0% { transform: scale(1); color: var(--accent); text-shadow: none; }
+            100% { transform: scale(1.1); color: var(--accent-glow); text-shadow: 0 0 10px var(--accent-glow); }
+        }
+        @keyframes flash-icon {
+            0%, 100% { opacity: 1; color: var(--accent-glow); text-shadow: 0 0 15px var(--accent-glow); }
+            50% { opacity: 0.2; color: var(--text-main); text-shadow: none; }
+        }
+        @keyframes bounce-icon {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-5px) scale(1.05); }
+        }
+        @keyframes wobble-icon {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(5deg); }
+            75% { transform: rotate(-5deg); }
+        }
+        @keyframes spin-icon {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+
+        /* 1. TECHNICAL SKILLS (fa-code) */
+        .info-box#skill-section:hover h3 i.fa-code {
+            animation: bounce-icon 0.8s ease-in-out infinite alternate;
+        }
+
+        /* 2. STRENGTHS (fa-bolt) */
+        .info-box:hover h3 i.fa-bolt {
+            animation: flash-icon 1s steps(2, end) infinite;
+        }
+
+        /* 3. PROJECT ICONS (Inside Info Boxes) */
+        .info-box:hover h3 i.fa-robot { 
+            animation: wobble-icon 0.5s ease-in-out infinite; 
+        }
+        .info-box:hover h3 i.fa-cogs { 
+            animation: spin-icon 2s linear infinite; 
+        }
+        .info-box:hover h3 i.fa-globe { 
+            animation: spin-icon 8s linear infinite; 
+        }
+
+        /* ---------------------------------------------------- */
+        /* EXISTING ANIMATION STYLES (Retained and ensured compatibility) */
+        /* ---------------------------------------------------- */
         .skill-bar { background-color: rgba(255, 255, 255, 0.1); height: 8px; border-radius: 4px; overflow: hidden; }
         .skill-progress {
             height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-glow));
