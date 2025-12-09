@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taimoor Hashim - Ultimate Tech Portfolio</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables - Glassmorphism Theme */
+        :root {
+            --bg: #0d0d0d;          
+            --text-main: #f0f0f0;   
+            --accent: #00bcd4;      
+            --accent-glow: #00e0ff; 
+            --glass-bg-box: rgba(255, 255, 255, 0.05);
+            --glass-bg-sidebar: rgba(10, 10, 10, 0.5);
+            --glass-border: rgba(0, 188, 212, 0.4);
+            --font-main: 'Poppins', sans-serif;
+            --radius: 15px;
+        }
+
+        /* Base & Global Reset */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-main); background-color: var(--bg);
+            color: var(--text-main); line-height: 1.6; min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Interactive Background */
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 10% 10%, rgba(0, 188, 212, 0.1), transparent 50%),
+                        radial-gradient(circle at 90% 90%, rgba(255, 0, 150, 0.05), transparent 50%);
+            background-size: 200% 200%; animation: backgroundShift 30s infinite alternate linear;
+            z-index: -1; opacity: 0.8;
+        }
+        @keyframes backgroundShift {
+            from { background-position: 0% 0%; } to { background-position: 100% 100%; }
+        }
+
+        a { color: var(--accent); text-decoration: none; transition: color 0.3s; }
+        a:hover { color: var(--accent-glow); text-shadow: 0 0 5px var(--accent-glow); }
+
+        /* SPLIT LAYOUT STRUCTURE */
+        .main-layout { display: flex; min-height: 100vh; max-width: 1500px; margin: 0 auto; }
+        .sidebar {
+            width: 30%; min-width: 350px; max-width: 400px; padding: 40px 30px;
+            position: fixed; top: 0; left: 0; bottom: 0; overflow-y: auto; z-index: 10;
+            background-color: var(--glass-bg-sidebar); 
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+        }
+        .main-content { flex-grow: 1; margin-left: 350px; padding: 40px; }
+        @media (max-width: 1000px) {
+            .main-layout { display: block; }
+            .sidebar { position: relative; width: 100%; min-width: auto; max-width: 100%; padding-bottom: 0; background-color: var(--bg); backdrop-filter: none; -webkit-backdrop-filter: none; }
+            .main-content { margin-left: 0; padding-top: 20px; }
+        }
+
+        /* GLASSMORPHISM BOX STYLING */
+        .info-box {
+            background-color: var(--glass-bg-box); border: 1px solid var(--glass-border);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            padding: 25px; border-radius: var(--radius); margin-bottom: 25px;
+            overflow: hidden; position: relative; cursor: pointer;
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out, border-color 0.3s;
+        }
+        .info-box:hover {
+            transform: translateY(-5px) rotateX(1deg) rotateY(-1deg);
+            box-shadow: 0 15px 40px rgba(0, 188, 212, 0.6), 0 0 20px var(--accent-glow);
+            border-color: var(--accent);
+        }
+        .info-box h3 {
+            color: var(--accent-glow); margin: 0; padding-bottom: 10px; border-bottom: 2px solid var(--accent);
+            font-size: 1.3em; font-weight: 600;
+        }
+        .info-box h3 i { margin-right: 10px; color: var(--text-main); }
+        
+        /* ---------------------------------------------------- */
+        /* 1. DYNAMIC SKILL BAR ANIMATION (ON HOVER) - WORKING FINE */
+        /* ---------------------------------------------------- */
+        .skill-item { margin-bottom: 15px; }
+        .skill-item p {
+            display: flex; justify-content: space-between; font-weight: 500;
+            font-size: 1em; margin-bottom: 5px;
+        }
+        .skill-bar {
+            background-color: rgba(255, 255, 255, 0.1);
+            height: 8px; border-radius: 4px; overflow: hidden;
+        }
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-glow));
+            width: 0; /* Initial state (0%) */
+            transition: width 1.5s ease-out; /* Meter-like smooth animation */
+            border-radius: 4px;
+        }
+        
+        /* ---------------------------------------------------- */
+        /* 2. EDUCATION BOOK PAGE FLIP ANIMATION */
+        /* ---------------------------------------------------- */
+        @keyframes pageflip {
+            0% { transform: rotateY(0deg); }
+            50% { transform: rotateY(15deg); }
+            100% { transform: rotateY(0deg); }
+        }
+        .education-box:hover h3 i.fa-book-open {
+            animation: pageflip 0.6s ease-in-out infinite alternate;
+        }
+
+        /* ---------------------------------------------------- */
+        /* 3. EXPERIENCE WEB TOOLS EJECTION ANIMATION */
+        /* ---------------------------------------------------- */
+        .experience-header-container {
+            position: relative; 
+            display: inline-flex;
+            align-items: center;
+        }
+        .main-icon { font-size: 1.5em; }
+        .tool-icon {
+            position: absolute;
+            opacity: 0;
+            font-size: 0.9em;
+            color: var(--accent-glow);
+            transition: all 0.5s ease-out;
+            top: 50%;
+            left: 0;
+            transform: translate(0, -50%); 
+            z-index: 1;
+        }
+        .experience-header-container:hover .tool-icon {
+            opacity: 1;
+            box-shadow: 0 0 5px var(--accent-glow);
+        }
+        .experience-header-container:hover .html-tool {
+            transform: translate(-30px, -250%) scale(1.1);
+            transition-delay: 0.1s;
+        }
+        .experience-header-container:hover .css-tool {
+            transform: translate(0, -350%) scale(1.1); 
+            transition-delay: 0.2s;
+        }
+        .experience-header-container:hover .js-tool {
+            transform: translate(30px, -250%) scale(1.1);
+            transition-delay: 0.3s;
+        }
+        .tool-icon.html-tool { color: orange; }
+        .tool-icon.css-tool { color: blue; }
+        .tool-icon.js-tool { color: yellow; }
+
+
+        /* ---------------------------------------------------- */
+        /* 4. CONTACT ICON ANIMATION (Phone Ring) */
+        /* ---------------------------------------------------- */
+        @keyframes ringing {
+            0% { transform: rotate(0); }
+            15% { transform: rotate(15deg); }
+            30% { transform: rotate(-15deg); }
+            45% { transform: rotate(15deg); }
+            60% { transform: rotate(0); }
+            100% { transform: rotate(0); }
+        }
+        .info-box.contact:hover h3 i.fa-phone {
+            animation: ringing 1s ease-in-out infinite;
+        }
+
+        /* POP-UP & DETAIL STYLING */
+        .popup-content {
+            max-height: 0; opacity: 0; transform: translateY(-10px);
+            transition: max-height 0.5s ease-out, opacity 0.5s ease-out, transform 0.5s ease-out;
+            padding-top: 0; overflow: hidden; color: #ccc;
+        }
+        .info-box:hover .popup-content {
+            max-height: 500px; opacity: 1; transform: translateY(0); padding-top: 15px;
+        }
+        .browser-simulation { /* Web browser simulation */
+            border: 1px solid #444; border-radius: 8px; overflow: hidden; background: #252525; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+        .browser-header {
+            background: #222; padding: 10px 15px; display: flex; align-items: center; border-bottom: 1px solid #444;
+        }
+        .dot { height: 10px; width: 10px; border-radius: 50%; margin-right: 5px; }
+        .dot.red { background: #ff5f56; } .dot.yellow { background: #ffbd2e; } .dot.green { background: #27c93f; }
+        .url-bar { flex-grow: 1; background: #444; color: #bbb; font-size: 0.8em; padding: 3px 10px; border-radius: 4px; margin-left: 10px; text-align: center; }
+        .browser-content { padding: 15px; background: var(--glass-bg-box); color: #ccc; }
+        .project-website:hover .popup-content { padding-top: 0; }
+    </style>
+</head>
+<body>
+    <div class="main-layout">
+        
+        <div class="sidebar" data-aos="fade-right">
+            <header>
+                <h1>Taimoor Hashim</h1>
+                <p class="title">Front-End / Web Developer | Computer Science Student</p>
+            </header>
+
+            <div class="info-box contact">
+                <h3><i class="fas fa-phone"></i> CONTACT INFO</h3>
+                <div class="popup-content">
+                    <p><strong>Email:</strong> <a href="mailto:taimoorkhan007705@gmail.com">taimoorkhan007705@gmail.com</a></p>
+                    <p><strong>Phone:</strong> +92-330-7071705</p>
+                    <p><strong>Address:</strong> Chatta Bakhtawar, Khan Plaza</p>
+                    <p><strong>Languages:</strong> English, Urdu, Saraiki</p>
+                </div>
+            </div>
+
+            <div class="info-box" id="skill-section">
+                <h3><i class="fas fa-code"></i> TECHNICAL SKILLS</h3>
+                <div class="popup-content">
+                    <div class="skill-item" data-percent="90">
+                        <p><span>HTML</span> <span>90%</span></p>
+                        <div class="skill-bar"><div class="skill-progress"></div></div>
+                    </div>
+                    <div class="skill-item" data-percent="85">
+                        <p><span>CSS</span> <span>85%</span></p>
+                        <div class="skill-bar"><div class="skill-progress"></div></div>
+                    </div>
+                    <div class="skill-item" data-percent="75">
+                        <p><span>JavaScript</span> <span>75%</span></p>
+                        <div class="skill-bar"><div class="skill-progress"></div></div>
+                    </div>
+                     <div class="skill-item" data-percent="70">
+                        <p><span>Java</span> <span>70%</span></p>
+                        <div class="skill-bar"><div class="skill-progress"></div></div>
+                    </div>
+                    <div class="skill-item" data-percent="65">
+                        <p><span>C++ (DSA)</span> <span>65%</span></p>
+                        <div class="skill-bar"><div class="skill-progress"></div></div>
+                    </div>
+                    <p style="margin-top:15px; color:var(--accent);">**Other Tools:** AWS (Internship), MS Word, Excel, Database Concepts</p>
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <h3><i class="fas fa-bolt"></i> STRENGTHS</h3>
+                <div class="popup-content">
+                    <ul>
+                        <li>Quick Learner</li>
+                        <li>Strong Communication Skills</li>
+                        <li>Problem-Solving Ability</li>
+                        <li>Team Collaboration</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            
+            <h2 class="section-heading" data-aos="fade-up"><i class="fas fa-user-circle"></i> Professional Summary</h2>
+            <div class="info-box" data-aos="fade-up">
+                <p>
+                    Motivated and detail-oriented Front-End / Web Developer. I am currently in the 7th semester of BS Computer Science and skilled in building responsive websites, designing user interfaces, and working with cloud tools. I completed a 5-month internship at **TezHost**, gaining hands-on experience in HTML, CSS, JavaScript, UI/UX designing, and AWS services. My passion is to develop efficient, user-friendly digital solutions.
+                </p>
+            </div>
+
+            <h2 class="section-heading" data-aos="fade-up">
+                <span class="experience-header-container">
+                    <i class="fas fa-briefcase main-icon"></i> 
+                    <span class="tool-icon html-tool"><i class="fab fa-html5"></i></span>
+                    <span class="tool-icon css-tool"><i class="fab fa-css3-alt"></i></span>
+                    <span class="tool-icon js-tool"><i class="fab fa-js-square"></i></span>
+                </span>
+                Experience & Education
+            </h2>
+            
+            <div class="info-box" data-aos="fade-up" data-aos-delay="100">
+                <h3>EXPERIENCE: TezHost - Web Developer Intern</h3>
+                <div class="popup-content">
+                     <div class="detail-card">
+                        <h4>TezHost - Web Developer Intern</h4>
+                        <p class="meta">5 Months | Role: Front-End Development & Designing</p>
+                        <p><strong>Key Responsibilities:</strong></p>
+                        <ul>
+                            <li>Designed and developed responsive web pages using HTML, CSS, and JavaScript.</li>
+                            <li>Collaborated with the senior development team to improve website performance and layout.</li>
+                            <li>Received official Certification and a Recommendation Letter from the CEO of TezHost.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box education-box" data-aos="fade-up" data-aos-delay="200">
+                <h3 class="education-header">
+                    <i class="fas fa-book-open"></i> EDUCATION
+                </h3>
+                <div class="popup-content">
+                    <div class="detail-card">
+                        <h4>BS Computer Science</h4>
+                        <p class="meta">Shifa Tameer-e-Millat University</p>
+                        <p>Currently in 7th Semester (3.0 CGPA)</p>
+                    </div>
+                    <div class="detail-card">
+                        <h4>F.Sc. (Pre-Medical)</h4>
+                        <p class="meta">Scored 73%</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-heading" data-aos="fade-up"><i class="fas fa-project-diagram"></i> Featured Projects</h2>
+            
+            <div class="info-box" data-aos="fade-up" data-aos-delay="100">
+                <h3><i class="fas fa-robot"></i> Line Follower Robot</h3>
+                <div class="popup-content">
+                    <p>Developed using Arduino Uno, demonstrating embedded systems knowledge and sensor integration.</p>
+                </div>
+            </div>
+
+            <div class="info-box" data-aos="fade-up" data-aos-delay="200">
+                <h3><i class="fas fa-cogs"></i> Management Systems</h3>
+                <div class="popup-content">
+                    <p>Implemented multiple management systems using Data Structures & Algorithms (DSA) to improve performance and efficiency.</p>
+                </div>
+            </div>
+
+            <div class="info-box project-website" data-aos="fade-up" data-aos-delay="300">
+                <h3><i class="fas fa-globe"></i> Dynamic Website with Database</h3>
+                <div class="popup-content">
+                    <div class="browser-simulation">
+                        <div class="browser-header">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                            <div class="url-bar">taimoorhashim.com/project-web</div>
+                        </div>
+                        <div class="browser-content">
+                            <p>Built a complete website featuring a working backend and database, showcasing full-stack development fundamentals.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+            disable: 'mobile'
+        });
+
+        // =====================================================
+        // JAVASCRIPT FOR SKILL BAR ANIMATION (ON HOVER) - VERIFIED WORKING
+        // =====================================================
+        const skillSection = document.getElementById('skill-section');
+
+        function startSkillAnimation() {
+            const skillBoxes = skillSection.querySelectorAll('.skill-item');
+            skillBoxes.forEach(box => {
+                const percent = box.getAttribute('data-percent');
+                const progress = box.querySelector('.skill-progress');
+                // Sets width to the target percentage (e.g., 90%)
+                progress.style.width = percent + '%'; 
+            });
+        }
+
+        function resetSkillAnimation() {
+            const skillBoxes = skillSection.querySelectorAll('.skill-item');
+            skillBoxes.forEach(box => {
+                const progress = box.querySelector('.skill-progress');
+                // Resets width to 0% to prepare for next animation
+                progress.style.width = '0%';
+            });
+        }
+
+        if (skillSection) {
+            // Mouse Enter: Start animation (meter fills up)
+            skillSection.addEventListener('mouseenter', startSkillAnimation);
+            
+            // Mouse Leave: Reset animation (meter goes back to 0)
+            skillSection.addEventListener('mouseleave', resetSkillAnimation);
+
+             // Initial reset so bars start at 0%
+             resetSkillAnimation();
+        }
+    </script>
+</body>
+</html>
